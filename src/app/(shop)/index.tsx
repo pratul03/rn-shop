@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { PRODUCTS } from "../../../assets/products";
-import { ProductListItem } from "../components/product-list-item";
+import { ProductListItem } from "../../components/product-list-item";
 
 const Home = () => {
   const numColumns = 2;
