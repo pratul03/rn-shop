@@ -33,7 +33,7 @@ export default Category;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     padding: 16,
   },
   categoryImage: {
