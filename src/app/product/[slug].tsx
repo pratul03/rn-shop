@@ -25,11 +25,72 @@ const ProductDetails = () => {
   const cartItem = items.find((product) => product.id === product.id);
   const initialQuantity = cartItem ? cartItem.quantity : 1;
   const [quantity, setQuantity] = useState(initialQuantity);
-  const increaseQuantity = () => {};
-  const decreaseQuantity = () => {};
+
+  const increaseQuantity = () => {
+    if (quantity < product.maxQuantity) {
+      setQuantity((prev) => prev + 1);
+      incrementItem(product.id);
+    } else {
+      toast.show(`Only ${product.maxQuantity} items are in stock`, {
+        type: "warning",
+        placement: "top",
+        duration: 1500,
+        style: {
+          backgroundColor: "#ff0000", // Red background for warning
+          padding: 10,
+          borderWidth: 1,
+          borderColor: "#ff2222", // Darker red for the border
+          borderRadius: 6,
+          marginBottom: 100,
+        },
+        textStyle: {
+          color: "#ffffff", // White text for visibility
+          fontSize: 16,
+          fontWeight: "bold",
+          letterSpacing: 1,
+        },
+        icon: <Feather name="alert-circle" size={24} color="#ffffff" />, // Warning icon
+      });
+    }
+  };
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity((prev) => prev - 1);
+      decrementItem(product.id);
+    }
+  };
 
   const totalPrice = (product.price * quantity).toFixed(2);
-  const addToCart = () => {};
+  const addToCart = () => {
+    addItem({
+      id: product.id,
+      title: product.title,
+      image: product.heroImage,
+      price: product.price,
+      quantity,
+    });
+    toast.show("Added to cart", {
+      type: "success",
+      placement: "bottom",
+      duration: 1500,
+      animationType: "zoom-in",
+      style: {
+        backgroundColor: "#333333", // Dark background
+        padding: 10,
+        borderWidth: 1,
+        borderColor: "#555555",
+        borderRadius: 6,
+        marginBottom: 100,
+      },
+      textStyle: {
+        color: "#ffffff", // White text to match button
+        fontSize: 16,
+        fontWeight: "bold",
+        letterSpacing: 1,
+      },
+      icon: <Feather name="check" size={24} color="#ffffff" />,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -82,7 +143,15 @@ const ProductDetails = () => {
             onPress={addToCart}
             disabled={quantity === 0}
           >
-            <Text style={styles.addToCartButton}>Add to cart</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={styles.addToCartText}>Add to cart</Text>
+              <Feather
+                name="shopping-bag"
+                size={22}
+                color="white"
+                style={{ marginLeft: 8 }}
+              />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -137,10 +206,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   quantityButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#007bff",
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: "#292929",
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: 8,
@@ -155,13 +224,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   addToCartButton: {
+    marginLeft: 15,
     flex: 1,
-    backgroundColor: "#28a745",
+    backgroundColor: "#1f1f20",
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 8,
+    marginHorizontal: 6,
   },
   addToCartText: {
     color: "#fff",
