@@ -1,10 +1,34 @@
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
+import * as Font from "expo-font";
 import { PRODUCTS } from "../../../assets/products";
 import { ProductListItem } from "../../components/product-list-item";
 import { ListHeader } from "../components/list-header";
 
 const Home = () => {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   const numColumns = 2;
+
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        "Inter-Black": require("../../../assets/font/Inter-Black.ttf"),
+      });
+      setFontsLoaded(true);
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
     <View>
@@ -29,6 +53,15 @@ const styles = StyleSheet.create({
   },
   flatListColumn: {
     justifyContent: "space-between",
+  },
+  titleText: {
+    fontFamily: "Inter-Black",
+    fontSize: 18,
+  },
+  headerText: {
+    fontFamily: "Inter-Black",
+    fontSize: 16,
+    color: "#333",
   },
 });
 

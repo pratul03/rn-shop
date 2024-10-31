@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Alert,
   FlatList,
@@ -7,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Modal,
 } from "react-native";
 import { useCartStore } from "../store/cart-store";
 import { StatusBar } from "expo-status-bar";
@@ -72,10 +74,16 @@ const CartItem = ({
 export default function Cart() {
   const { items, removeItem, incrementItem, decrementItem, getTotalPrice } =
     useCartStore();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleCheckOut = () => {
-    Alert.alert("Proceeding to checkout", `Total amount: ₹ ${getTotalPrice()}`);
+    setModalVisible(true);
   };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style={Platform.OS === "android" ? "dark" : "auto"} />
@@ -103,11 +111,44 @@ export default function Cart() {
           <Text style={styles.checkoutButtonText}>Checkout</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Custom Checkout Modal */}
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="fade"
+        onRequestClose={closeModal}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Proceeding to Checkout</Text>
+            <Text style={styles.modalMessage}>
+              Total amount: ₹{getTotalPrice()}
+            </Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                onPress={closeModal}
+                style={[styles.modalButton, styles.cancelButton]}
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={closeModal}
+                style={[styles.modalButton, styles.confirmButton]}
+              >
+                <Text style={styles.modalButtonText}>Confirm</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  // Existing styles for Cart, CartItem, and other elements
+  // ...
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -135,17 +176,20 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 18,
+    fontFamily: "Inter-Black",
     fontWeight: "bold",
     marginBottom: 4,
   },
   itemPrice: {
     fontSize: 16,
+    fontFamily: "Inter-Black",
     color: "#888",
     marginBottom: 4,
   },
   itemQuantity: {
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: "Inter-Black",
+    fontWeight: "800",
     color: "#666",
   },
   removeButton: {
@@ -179,6 +223,8 @@ const styles = StyleSheet.create({
   checkoutButtonText: {
     color: "#fff",
     fontSize: 18,
+    letterSpacing: 1,
+    fontFamily: "Inter-Black",
     fontWeight: "bold",
   },
   quantityContainer: {
@@ -197,5 +243,52 @@ const styles = StyleSheet.create({
   quantityButtonText: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+
+  // New styles for Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 16,
+    fontFamily: "",
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  modalButton: {
+    flex: 1,
+    padding: 10,
+    margin: 5,
+    alignItems: "center",
+    borderRadius: 5,
+    backgroundColor: "#D1D1D1",
+  },
+  confirmButton: {
+    backgroundColor: "#28a745",
+  },
+  cancelButton: {
+    backgroundColor: "#ff5252",
+  },
+  modalButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
   },
 });
