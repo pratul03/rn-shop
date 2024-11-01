@@ -24,7 +24,7 @@ type CartItemType = {
 
 type CartItemProps = {
   item: CartItemType;
-  onRemove: (id: number) => void;
+  onRemoveRequest: (item: CartItemType) => void;
   onIncrement: (id: number) => void;
   onDecrement: (id: number) => void;
 };
@@ -33,7 +33,7 @@ const CartItem = ({
   item,
   onDecrement,
   onIncrement,
-  onRemove,
+  onRemoveRequest,
 }: CartItemProps) => {
   return (
     <View style={styles.cartItem}>
@@ -62,10 +62,14 @@ const CartItem = ({
         </View>
       </View>
       <TouchableOpacity
-        onPress={() => onRemove(item.id)}
+        onPress={() => onRemoveRequest(item)}
         style={styles.removeButton}
       >
-        <Text style={styles.removeButtonText}>Remove</Text>
+        <Text style={styles.removeButtonText}>
+          {" "}
+          <Feather name="trash-2" color={"white"} size={22} />
+          Remove
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -75,6 +79,8 @@ export default function Cart() {
   const { items, removeItem, incrementItem, decrementItem, getTotalPrice } =
     useCartStore();
   const [modalVisible, setModalVisible] = useState(false);
+  const [removeModalVisible, setRemoveModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<CartItemType | null>(null);
 
   const handleCheckOut = () => {
     setModalVisible(true);
@@ -84,9 +90,27 @@ export default function Cart() {
     setModalVisible(false);
   };
 
+  const handleRemoveRequest = (item: CartItemType) => {
+    setSelectedItem(item);
+    setRemoveModalVisible(true);
+  };
+
+  const confirmRemoveItem = () => {
+    if (selectedItem) {
+      removeItem(selectedItem.id);
+      setRemoveModalVisible(false);
+      setSelectedItem(null);
+    }
+  };
+
+  const cancelRemoveItem = () => {
+    setRemoveModalVisible(false);
+    setSelectedItem(null);
+  };
+
   return (
     <View style={styles.container}>
-      <StatusBar style={Platform.OS === "android" ? "dark" : "auto"} />
+      <StatusBar style={Platform.OS === "android" ? "auto" : "dark"} />
 
       <FlatList
         data={items}
@@ -94,7 +118,7 @@ export default function Cart() {
         renderItem={({ item }) => (
           <CartItem
             item={item}
-            onRemove={removeItem}
+            onRemoveRequest={handleRemoveRequest}
             onIncrement={incrementItem}
             onDecrement={decrementItem}
           />
@@ -105,14 +129,18 @@ export default function Cart() {
       <View style={styles.footer}>
         <Text style={styles.totalText}>Total: ₹{getTotalPrice()}</Text>
         <TouchableOpacity
-          style={styles.checkoutButton}
+          style={[
+            styles.checkoutButton,
+            items.length === 0 && styles.disabledCheckoutButton,
+          ]}
           onPress={handleCheckOut}
+          disabled={items.length === 0}
         >
           <Text style={styles.checkoutButtonText}>Checkout</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Custom Checkout Modal */}
+      {/* Checkout Modal */}
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -130,13 +158,44 @@ export default function Cart() {
                 onPress={closeModal}
                 style={[styles.modalButton, styles.cancelButton]}
               >
-                <Text style={styles.modalButtonText}>Cancel</Text>
+                <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={closeModal}
+                style={[styles.modalButton, styles.checkOutConfirmButton]}
+              >
+                <Text style={styles.checkOutConfirmButtonText}>Confirm</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Remove Confirmation Modal */}
+      <Modal
+        transparent={true}
+        visible={removeModalVisible}
+        animationType="fade"
+        onRequestClose={cancelRemoveItem}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Remove Item</Text>
+            <Text style={styles.modalMessage}>
+              Are you sure you want to remove this item from the cart?
+            </Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                onPress={cancelRemoveItem}
+                style={[styles.modalButton, styles.cancelButton]}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={confirmRemoveItem}
                 style={[styles.modalButton, styles.confirmButton]}
               >
-                <Text style={styles.modalButtonText}>Confirm</Text>
+                <Text style={styles.confirmButtonText}>Confirm</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -193,14 +252,23 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   removeButton: {
-    padding: 8,
-    backgroundColor: "#ff5252",
-    borderRadius: 4,
+    flexDirection: "row", // Align icon and text horizontally
+    alignItems: "center", // Center items vertically
+    paddingVertical: 10, // Slightly reduced padding for compact height
+    paddingHorizontal: 10, // Reduced horizontal padding to make the button narrower
+    backgroundColor: "#FF5252", // Red background color
+    borderRadius: 4, // Rounded corners
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   removeButtonText: {
-    fontWeight: "500",
-    color: "#fff",
-    fontSize: 14,
+    fontFamily: "Inter-Black",
+    fontSize: 16,
+    color: "#fff", // White text color
+    textAlign: "center",
   },
   footer: {
     borderTopWidth: 1,
@@ -219,6 +287,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 8,
+  },
+  disabledCheckoutButton: {
+    backgroundColor: "#858585",
   },
   checkoutButtonText: {
     color: "#fff",
@@ -266,7 +337,9 @@ const styles = StyleSheet.create({
   },
   modalMessage: {
     fontSize: 16,
-    fontFamily: "",
+    fontFamily: "Inter-Black",
+    fontStyle: "normal",
+    fontWeight: "500",
     marginBottom: 20,
   },
   modalButtons: {
@@ -282,13 +355,42 @@ const styles = StyleSheet.create({
     backgroundColor: "#D1D1D1",
   },
   confirmButton: {
-    backgroundColor: "#28a745",
+    backgroundColor: "#f03f3f", // Yellow background for Agree button
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 4, // Slightly more rounded corners
+  },
+  checkOutConfirmButton: {
+    backgroundColor: "#0e110e",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 4,
+  },
+  checkOutConfirmButtonText: {
+    fontFamily: "Inter-Black",
+    fontSize: 16,
+    fontWeight: "black",
+    color: "white",
+  },
+
+  confirmButtonText: {
+    fontFamily: "Inter-Black",
+    fontSize: 16,
+    color: "#ffffff", // Black text for contrast
+    textAlign: "center",
   },
   cancelButton: {
-    backgroundColor: "#ff5252",
+    fontWeight: "semibold",
+    backgroundColor: "#E0E0E0", // Light gray background for Cancel button
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
   },
-  modalButtonText: {
-    color: "#FFFFFF",
+  cancelButtonText: {
+    fontFamily: "Inter-Black",
+    fontWeight: "semibold",
     fontSize: 16,
+    color: "#000", // Black text for Cancel button
+    textAlign: "center",
   },
 });
