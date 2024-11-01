@@ -88,7 +88,7 @@ const ProductDetails = () => {
         fontWeight: "bold",
         letterSpacing: 1,
       },
-      icon: <Feather name="check" size={24} color="#ffffff" />,
+      icon: <Feather name="package" size={24} color="#ffffff" />,
     });
   };
 
