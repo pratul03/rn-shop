@@ -19,9 +19,11 @@ const TabsLayout = () => {
           tabBarInactiveTintColor: "gray",
           tabBarLabelStyle: { fontSize: 16 },
           tabBarStyle: {
-            padding: 2,
-            borderTopLeftRadius: 5,
-            borderTopRightRadius: 5,
+            paddingVertical: 10,
+            height: 60,
+            borderTopLeftRadius: 4,
+            borderTopRightRadius: 4,
+            marginBottom: 5,
           },
           headerShown: false,
         }}
