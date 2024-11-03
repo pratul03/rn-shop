@@ -20,10 +20,10 @@ const TabsLayout = () => {
           tabBarLabelStyle: { fontSize: 16 },
           tabBarStyle: {
             paddingVertical: 10,
-            height: 60,
-            borderTopLeftRadius: 4,
-            borderTopRightRadius: 4,
-            marginBottom: 5,
+            height: 70,
+            borderTopLeftRadius: 5,
+            borderTopRightRadius: 5,
+            paddingBottom: 5,
           },
           headerShown: false,
         }}

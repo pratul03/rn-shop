@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   orderContainer: {
     backgroundColor: "#F8F8FF",
     padding: 16,
+    marginHorizontal: 1,
     marginVertical: 8,
     borderRadius: 5,
     shadowColor: "#000", // Black shadow
