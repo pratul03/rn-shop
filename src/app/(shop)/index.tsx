@@ -4,6 +4,7 @@ import * as Font from "expo-font";
 import { PRODUCTS } from "../../../assets/products";
 import { ProductListItem } from "../../components/product-list-item";
 import { ListHeader } from "../components/list-header";
+import Auth from "../auth";
 
 const Home = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -25,19 +26,20 @@ const Home = () => {
   }
 
   return (
-    <View>
-      <FlatList
-        data={PRODUCTS}
-        renderItem={({ item }) => <ProductListItem product={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={numColumns}
-        key={`flatlist-${numColumns}`} // Unique key to force re-render
-        ListHeaderComponent={ListHeader}
-        contentContainerStyle={styles.flatListContent}
-        columnWrapperStyle={styles.flatListColumn}
-        style={{ paddingHorizontal: 10, paddingVertical: 5 }}
-      />
-    </View>
+    <Auth />
+    // <View>
+    //   <FlatList
+    //     data={PRODUCTS}
+    //     renderItem={({ item }) => <ProductListItem product={item} />}
+    //     keyExtractor={(item) => item.id.toString()}
+    //     numColumns={numColumns}
+    //     key={`flatlist-${numColumns}`} // Unique key to force re-render
+    //     ListHeaderComponent={ListHeader}
+    //     contentContainerStyle={styles.flatListContent}
+    //     columnWrapperStyle={styles.flatListColumn}
+    //     style={{ paddingHorizontal: 10, paddingVertical: 5 }}
+    //   />
+    // </View>
   );
 };
 
