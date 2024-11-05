@@ -1,22 +1,28 @@
 import { Session } from "@supabase/supabase-js";
-import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { supabase } from "../lib/supabase";
+
+type AuthData = {
+  session: Session | null;
+  mounting: boolean;
+  user: any;
+};
+const AuthContext = createContext<AuthData>({
+  session: null,
+  mounting: true,
+  user: null,
+});
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState(null);
   const [mounting, setMounting] = useState(true);
-
-  type AuthData = {
-    session: Session | null;
-    mounting: boolean;
-    user: any;
-  };
-  const AuthContext = createContext<AuthData>({
-    session: null,
-    mounting: true,
-    user: null,
-  });
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -53,3 +59,5 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     </AuthContext.Provider>
   );
 }
+
+export const useAuth = () => useContext(AuthContext);
