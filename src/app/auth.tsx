@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.7)",
   },
   container: {
+    fontFamily: "Inter-Black",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -148,11 +149,13 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   button: {
-    backgroundColor: "#6a1b9a",
+    backgroundColor: "#0e0b0b",
     padding: 16,
     borderRadius: 8,
     marginBottom: 16,
     width: "90%",
+    borderColor: "white",
+    borderWidth: 1,
     alignItems: "center",
   },
   signUpButton: {
