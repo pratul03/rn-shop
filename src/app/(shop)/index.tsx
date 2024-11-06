@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  ActivityIndicator,
+  Text,
+} from "react-native";
 import * as Font from "expo-font";
 import { PRODUCTS } from "../../../assets/products";
 import { ProductListItem } from "../../components/product-list-item";
@@ -12,12 +18,15 @@ const Home = () => {
 
   useEffect(() => {
     async function loadFonts() {
-      await Font.loadAsync({
-        "Inter-Black": require("../../../assets/font/Inter-Black.ttf"),
-      });
-      setFontsLoaded(true);
+      try {
+        await Font.loadAsync({
+          "Inter-Black": require("../../../assets/font/Inter-Black.otf"),
+        });
+        setFontsLoaded(true);
+      } catch (error) {
+        console.error("Error loading fonts:", error);
+      }
     }
-
     loadFonts();
   }, []);
 
@@ -26,14 +35,15 @@ const Home = () => {
   }
 
   return (
+    // Uncomment if you want to render the Auth component first
     // <Auth />
-    <View>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={PRODUCTS}
         renderItem={({ item }) => <ProductListItem product={item} />}
         keyExtractor={(item) => item.id.toString()}
         numColumns={numColumns}
-        key={`flatlist-${numColumns}`} // Unique key to force re-render
+        key={`flatlist-${numColumns}`}
         ListHeaderComponent={ListHeader}
         contentContainerStyle={styles.flatListContent}
         columnWrapperStyle={styles.flatListColumn}

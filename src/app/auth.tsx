@@ -9,6 +9,11 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { supabase } from "../lib/supabase";
+import { Toast } from "react-native-toast-notifications";
+import { Feather } from "@expo/vector-icons";
+import { useAuth } from "../providers/auth-provider";
+import { Redirect } from "expo-router";
 import React from "react";
 
 const authSchema = zod.object({
@@ -19,6 +24,10 @@ const authSchema = zod.object({
 });
 
 export default function Auth() {
+  const { session } = useAuth();
+
+  if (session) return <Redirect href={"/"} />;
+
   const { control, handleSubmit, formState } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -27,11 +36,85 @@ export default function Auth() {
     },
   });
 
-  const signIn = (data: zod.infer<typeof authSchema>) => {
-    console.log(data);
+  const signIn = async (data: zod.infer<typeof authSchema>) => {
+    const { error } = await supabase.auth.signInWithPassword(data);
+    if (error) {
+      Toast.show(`${error.message}`, {
+        type: "danger", // Use 'danger' for error indication
+        placement: "top", // Position it at the top for higher visibility
+        duration: 2000, // Increase duration to keep it visible longer
+        animationType: "slide-in", // Use slide-in for more alert-like animation
+        style: {
+          backgroundColor: "#cc0000", // Red background for error
+          padding: 15,
+          borderWidth: 1,
+          borderColor: "#990000",
+          borderRadius: 8,
+          marginTop: 80,
+          minWidth: "90%", // Make it bigger for alert-style visibility
+          maxWidth: "90%",
+          alignSelf: "center",
+        },
+        textStyle: {
+          color: "#ffffff", // White text for contrast
+          fontSize: 18,
+          fontWeight: "bold",
+          letterSpacing: 1.2,
+        },
+        icon: <Feather name="alert-circle" size={28} color="#ffffff" />, // Alert icon for clarity
+      });
+    } else {
+      Toast.show("Signed in Successfully", {
+        type: "success",
+        placement: "bottom",
+        duration: 1000,
+        animationType: "zoom-in",
+        style: {
+          backgroundColor: "#333333", // Dark background
+          padding: 10,
+          borderWidth: 1,
+          borderColor: "#555555",
+          borderRadius: 6,
+          marginBottom: 100,
+        },
+        textStyle: {
+          color: "#ffffff", // White text to match button
+          fontSize: 16,
+          fontWeight: "bold",
+          letterSpacing: 1,
+        },
+        icon: <Feather name="smile" size={24} color="#ffffff" />,
+      });
+    }
   };
-  const signUp = (data: zod.infer<typeof authSchema>) => {
-    console.log(data);
+
+  const signUp = async (data: zod.infer<typeof authSchema>) => {
+    const { error } = await supabase.auth.signUp(data);
+    if (error) {
+      alert(error.message);
+    } else {
+      Toast.show("Signed Up Successfully", {
+        type: "success",
+        placement: "bottom",
+        duration: 1000,
+        animationType: "zoom-in",
+        style: {
+          backgroundColor: "#333333", // Dark background
+          padding: 10,
+          borderWidth: 1,
+          borderColor: "#555555",
+          borderRadius: 6,
+          marginBottom: 100,
+        },
+        textStyle: {
+          color: "#ffffff", // White text to match button
+          fontSize: 16,
+          fontWeight: "bold",
+          letterSpacing: 1,
+        },
+        icon: <Feather name="star" size={24} color="#FFD700" />,
+      });
+    }
   };
   return (
     <ImageBackground
@@ -52,7 +135,7 @@ export default function Auth() {
             field: { value, onChange, onBlur },
             fieldState: { error },
           }) => (
-            <>
+            <React.Fragment>
               <TextInput
                 placeholder="Email"
                 style={styles.input}
@@ -64,7 +147,7 @@ export default function Auth() {
                 editable={!formState.isSubmitting}
               />
               {error && <Text style={styles.error}>{error.message}</Text>}
-            </>
+            </React.Fragment>
           )}
         />
         <Controller
