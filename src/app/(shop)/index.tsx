@@ -1,43 +1,35 @@
-import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  ActivityIndicator,
-  Text,
-} from "react-native";
-import * as Font from "expo-font";
+import React, { useEffect } from "react";
+import { StyleSheet, View, FlatList } from "react-native";
+import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+import * as SplashScreen from "expo-splash-screen";
 import { PRODUCTS } from "../../../assets/products";
 import { ProductListItem } from "../../components/product-list-item";
 import { ListHeader } from "../components/list-header";
-import Auth from "../auth";
+import Auth from "../auth"; // Uncomment if needed
+
+SplashScreen.preventAutoHideAsync();
 
 const Home = () => {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-  const numColumns = 2;
+  const [fontsLoaded] = useFonts({
+    Inter_900Black,
+  });
 
   useEffect(() => {
-    async function loadFonts() {
-      try {
-        await Font.loadAsync({
-          "Inter-Black": require("../../../assets/font/Inter-Black.otf"),
-        });
-        setFontsLoaded(true);
-      } catch (error) {
-        console.error("Error loading fonts:", error);
-      }
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
     }
-    loadFonts();
-  }, []);
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return null; // Return null until fonts are loaded and splash screen is hidden
   }
 
+  const numColumns = 2;
+
   return (
-    // Uncomment if you want to render the Auth component first
-    // <Auth />
     <View style={{ flex: 1 }}>
+      {/* Uncomment if you want to render the Auth component first */}
+      {/* <Auth /> */}
       <FlatList
         data={PRODUCTS}
         renderItem={({ item }) => <ProductListItem product={item} />}
@@ -61,11 +53,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   titleText: {
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontSize: 18,
   },
   headerText: {
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontSize: 16,
     color: "#333",
   },
