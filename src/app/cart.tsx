@@ -235,19 +235,19 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 18,
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontWeight: "bold",
     marginBottom: 4,
   },
   itemPrice: {
     fontSize: 16,
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     color: "#888",
     marginBottom: 4,
   },
   itemQuantity: {
     fontSize: 14,
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontWeight: "800",
     color: "#666",
   },
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   removeButtonText: {
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontSize: 16,
     color: "#fff", // White text color
     textAlign: "center",
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     letterSpacing: 1,
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontWeight: "bold",
   },
   quantityContainer: {
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   },
   modalMessage: {
     fontSize: 16,
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontStyle: "normal",
     fontWeight: "500",
     marginBottom: 20,
@@ -367,14 +367,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   checkOutConfirmButtonText: {
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontSize: 16,
     fontWeight: "black",
     color: "white",
   },
 
   confirmButtonText: {
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontSize: 16,
     color: "#ffffff", // Black text for contrast
     textAlign: "center",
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   cancelButtonText: {
-    fontFamily: "Inter-Black",
+    fontFamily: "Inter_900Black",
     fontWeight: "semibold",
     fontSize: 16,
     color: "#000", // Black text for Cancel button
