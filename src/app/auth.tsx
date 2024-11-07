@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   title: {
+    fontFamily: "Inter_900Black",
     fontSize: 36,
     fontWeight: "bold",
     color: "#fff",
