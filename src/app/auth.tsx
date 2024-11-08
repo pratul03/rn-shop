@@ -45,10 +45,8 @@ export default function Auth() {
         duration: 2000, // Increase duration to keep it visible longer
         animationType: "slide-in", // Use slide-in for more alert-like animation
         style: {
-          backgroundColor: "#cc0000", // Red background for error
+          backgroundColor: "#ffdfdf", // Red background for error
           padding: 15,
-          borderWidth: 1,
-          borderColor: "#990000",
           borderRadius: 8,
           marginTop: 80,
           minWidth: "90%", // Make it bigger for alert-style visibility
@@ -56,12 +54,13 @@ export default function Auth() {
           alignSelf: "center",
         },
         textStyle: {
-          color: "#ffffff", // White text for contrast
+          fontFamily: "Inter_900Black",
+          color: "#ff3d3d", // White text for contrast
           fontSize: 18,
-          fontWeight: "bold",
+          fontWeight: "700",
           letterSpacing: 1.2,
         },
-        icon: <Feather name="alert-circle" size={28} color="#ffffff" />, // Alert icon for clarity
+        icon: <Feather name="alert-circle" size={28} color="#ff3d3d" />, // Alert icon for clarity
       });
     } else {
       Toast.show("Signed in Successfully", {
@@ -78,9 +77,10 @@ export default function Auth() {
           marginBottom: 100,
         },
         textStyle: {
+          fontFamily: "Inter_900Black",
           color: "#ffffff", // White text to match button
           fontSize: 16,
-          fontWeight: "bold",
+          fontWeight: "700",
           letterSpacing: 1,
         },
         icon: <Feather name="smile" size={24} color="#ffffff" />,
