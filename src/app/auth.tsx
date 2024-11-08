@@ -42,11 +42,11 @@ export default function Auth() {
       Toast.show(`${error.message}`, {
         type: "danger", // Use 'danger' for error indication
         placement: "top", // Position it at the top for higher visibility
-        duration: 2000, // Increase duration to keep it visible longer
-        animationType: "slide-in", // Use slide-in for more alert-like animation
+        duration: 1000, // Increase duration to keep it visible longer
+        animationType: "zoom-in", // Use slide-in for more alert-like animation
         style: {
-          backgroundColor: "#ffdfdf", // Red background for error
-          padding: 15,
+          backgroundColor: "#ffffff", // Red background for error
+          padding: 12,
           borderRadius: 8,
           marginTop: 80,
           minWidth: "90%", // Make it bigger for alert-style visibility
@@ -54,11 +54,10 @@ export default function Auth() {
           alignSelf: "center",
         },
         textStyle: {
-          fontFamily: "Inter_900Black",
+          fontFamily: "Inter_600SemiBold",
           color: "#ff3d3d", // White text for contrast
-          fontSize: 18,
-          fontWeight: "700",
-          letterSpacing: 1.2,
+          fontSize: 16,
+          marginLeft: 40,
         },
         icon: <Feather name="alert-circle" size={28} color="#ff3d3d" />, // Alert icon for clarity
       });
@@ -77,7 +76,7 @@ export default function Auth() {
           marginBottom: 100,
         },
         textStyle: {
-          fontFamily: "Inter_900Black",
+          fontFamily: "Inter_600SemiBold",
           color: "#ffffff", // White text to match button
           fontSize: 16,
           fontWeight: "700",
