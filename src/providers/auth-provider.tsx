@@ -46,6 +46,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
       //     setUser(user);
       //   }
       // }
+
       setMounting(false);
     };
     fetchSession();
