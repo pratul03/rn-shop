@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 
 import { PRODUCTS } from "../../../assets/products";
