@@ -206,8 +206,6 @@ export default function Cart() {
 }
 
 const styles = StyleSheet.create({
-  // Existing styles for Cart, CartItem, and other elements
-  // ...
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -362,9 +360,9 @@ const styles = StyleSheet.create({
   },
   checkOutConfirmButton: {
     backgroundColor: "#0e110e",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 4,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
   },
   checkOutConfirmButtonText: {
     fontFamily: "Inter_600SemiBold",
