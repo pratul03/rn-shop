@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   removeButtonText: {
-    fontFamily: "Inter_900Black",
+    fontFamily: "Inter_500Medium",
     fontSize: 16,
     color: "#fff", // White text color
     textAlign: "center",
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   },
   modalMessage: {
     fontSize: 16,
-    fontFamily: "Inter_900Black",
+    fontFamily: "Inter_600SemiBold",
     fontStyle: "normal",
     fontWeight: "500",
     marginBottom: 20,
@@ -367,14 +367,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   checkOutConfirmButtonText: {
-    fontFamily: "Inter_900Black",
+    fontFamily: "Inter_600SemiBold",
     fontSize: 16,
     fontWeight: "black",
     color: "white",
   },
 
   confirmButtonText: {
-    fontFamily: "Inter_900Black",
+    fontFamily: "Inter_600SemiBold",
     fontSize: 16,
     color: "#ffffff", // Black text for contrast
     textAlign: "center",
@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   cancelButtonText: {
-    fontFamily: "Inter_900Black",
+    fontFamily: "Inter_600SemiBold",
     fontWeight: "semibold",
     fontSize: 16,
     color: "#000", // Black text for Cancel button
