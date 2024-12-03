@@ -17,9 +17,10 @@ import Feather from "@expo/vector-icons/Feather";
 type CartItemType = {
   id: number;
   title: string;
-  image: any;
+  heroImage: string;
   price: number;
   quantity: number;
+  maxQuantity: number;
 };
 
 type CartItemProps = {
@@ -37,7 +38,7 @@ const CartItem = ({
 }: CartItemProps) => {
   return (
     <View style={styles.cartItem}>
-      <Image source={item.image} style={styles.itemImage} />
+      <Image source={{ uri: item.heroImage }} style={styles.itemImage} />
       <View style={styles.itemDetails}>
         <Text style={styles.itemTitle}>{item.title}</Text>
         <Text style={styles.itemPrice}>₹{item.price.toFixed(2)}</Text>
