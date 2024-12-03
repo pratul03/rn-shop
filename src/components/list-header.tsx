@@ -9,11 +9,15 @@ import {
   View,
 } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { CATEGORIES } from "../../../assets/categories";
-import { useCartStore } from "../../store/cart-store";
-import { supabase } from "../../lib/supabase";
+import { useCartStore } from "../store/cart-store";
+import { supabase } from "../lib/supabase";
+import { Tables } from "../types/database.types";
 
-export const ListHeader = () => {
+export const ListHeader = ({
+  categories,
+}: {
+  categories: Tables<"category">[];
+}) => {
   const { getItemCount } = useCartStore();
 
   const handleSignOut = async () => {
@@ -61,14 +65,14 @@ export const ListHeader = () => {
       </View>
       <View style={styles.heroContainer}>
         <Image
-          source={require("../../../assets/images/hero.png")}
+          source={require("../../assets/images/hero.png")}
           style={styles.heroImage}
         />
       </View>
       <View style={styles.categoriesContainer}>
         <Text style={styles.sectionTitle}>Categories</Text>
         <FlatList
-          data={CATEGORIES}
+          data={categories}
           renderItem={({ item }) => (
             <Link asChild href={`/categories/${item.slug}`}>
               <Pressable style={styles.category}>

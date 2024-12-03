@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import { ProductListItem } from "../../components/product-list-item";
-import { ListHeader } from "../components/list-header";
+import { ListHeader } from "../../components/list-header";
 import { getProductsAndCategories } from "../../api/api";
 
 const Home = () => {
@@ -26,7 +26,7 @@ const Home = () => {
         renderItem={({ item }) => <ProductListItem product={item} />}
         keyExtractor={(item) => item.id.toString()}
         numColumns={numColumns}
-        ListHeaderComponent={ListHeader}
+        ListHeaderComponent={<ListHeader categories={data.categories} />}
         contentContainerStyle={styles.flatListContent}
         columnWrapperStyle={styles.flatListColumn}
         style={{ paddingHorizontal: 10, paddingVertical: 5 }}
