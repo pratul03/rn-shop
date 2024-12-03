@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import { PRODUCTS } from "../../assets/products";
 
 type CartItemType = {
   id: number;
   title: string;
-  image: any;
+  heroImage: string;
   price: number;
   quantity: number;
+  maxQuantity: number;
 };
 
 type CartState = {
@@ -31,11 +31,7 @@ export const useCartStore = create<CartState>((set, get) => ({
           i.id === item.id
             ? {
                 ...i,
-                quantity: Math.min(
-                  i.quantity + item.quantity,
-                  PRODUCTS.find((p) => p.id === item.id)?.maxQuantity ||
-                    i.quantity
-                ),
+                quantity: Math.min(i.quantity + item.quantity, i.maxQuantity),
               }
             : i
         ),
@@ -48,12 +44,9 @@ export const useCartStore = create<CartState>((set, get) => ({
     set((state) => ({ items: state.items.filter((item) => item.id !== id) })),
   incrementItem: (id: number) =>
     set((state) => {
-      const product = PRODUCTS.find((p) => p.id === id);
-      if (!product) return state;
-
       return {
         items: state.items.map((item) =>
-          item.id === id && item.quantity < product.maxQuantity
+          item.id === id && item.quantity < item.maxQuantity
             ? { ...item, quantity: item.quantity + 1 }
             : item
         ),
