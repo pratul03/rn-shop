@@ -7,7 +7,6 @@ import {
   Text,
 } from "react-native";
 
-import { PRODUCTS } from "../../../assets/products";
 import { ProductListItem } from "../../components/product-list-item";
 import { ListHeader } from "../components/list-header";
 import { getProductsAndCategories } from "../../api/api";
@@ -44,11 +43,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   titleText: {
-    fontFamily: "Inter_900Black", // Ensure this matches the font in useFonts
+    fontFamily: "Inter_600medium", // Ensure this matches the font in useFonts
     fontSize: 18,
   },
   headerText: {
-    fontFamily: "Inter_900Black", // Ensure this matches the font in useFonts
+    fontFamily: "Inter_600medium", // Ensure this matches the font in useFonts
     fontSize: 16,
     color: "#333",
   },
