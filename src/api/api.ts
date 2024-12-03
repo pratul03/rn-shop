@@ -16,3 +16,23 @@ export const getProductsAndCategories = () => {
     },
   });
 };
+
+export const getProduct = (slug: string) => {
+  return useQuery({
+    queryKey: ["product", slug],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("product")
+        .select("*")
+        .eq("slug", slug)
+        .single();
+
+      if (error || !data) {
+        throw new Error(
+          `An error occurred while fetching data: ${error?.message}`
+        );
+      }
+      return data;
+    },
+  });
+};
