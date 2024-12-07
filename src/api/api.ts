@@ -81,7 +81,7 @@ export const getMyOrders = () => {
 
       if (error)
         throw new Error(
-          `An error occurred while fetching orders : ${error.message}`
+          `An error occurred while fetching orders: ${error.message}`
         );
 
       return data;
