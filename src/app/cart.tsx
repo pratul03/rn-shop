@@ -13,6 +13,9 @@ import {
 import { useCartStore } from "../store/cart-store";
 import { StatusBar } from "expo-status-bar";
 import Feather from "@expo/vector-icons/Feather";
+import { createOrder, createOrderItem } from "../api/api";
+import { Toast } from "react-native-toast-notifications";
+import LottieView from "lottie-react-native"; // Import Lottie
 
 type CartItemType = {
   id: number;
@@ -67,9 +70,7 @@ const CartItem = ({
         style={styles.removeButton}
       >
         <Text style={styles.removeButtonText}>
-          {" "}
-          <Feather name="trash-2" color={"white"} size={22} />
-          Remove
+          <Feather name="trash-2" color={"white"} size={22} /> Remove
         </Text>
       </TouchableOpacity>
     </View>
@@ -77,18 +78,56 @@ const CartItem = ({
 };
 
 export default function Cart() {
-  const { items, removeItem, incrementItem, decrementItem, getTotalPrice } =
-    useCartStore();
+  const {
+    items,
+    removeItem,
+    incrementItem,
+    decrementItem,
+    getTotalPrice,
+    resetCart,
+  } = useCartStore();
   const [modalVisible, setModalVisible] = useState(false);
   const [removeModalVisible, setRemoveModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<CartItemType | null>(null);
 
-  const handleCheckOut = () => {
-    setModalVisible(true);
+  const { mutateAsync: createSupabaseOrder } = createOrder();
+  const { mutateAsync: createSupabaseOrderItem } = createOrderItem();
+
+  const handleCheckOut = async () => {
+    const totalPrice = parseFloat(getTotalPrice());
+    try {
+      await createSupabaseOrder(
+        { totalPrice },
+        {
+          onSuccess: (data) => {
+            createSupabaseOrderItem(
+              items.map((item) => ({
+                orderId: data.id,
+                productId: item.id,
+                quantity: item.quantity,
+              })),
+              {
+                onSuccess: () => {
+                  setModalVisible(true); // Show modal
+                },
+              }
+            );
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      Toast.show("Something went wrong", {
+        type: "danger",
+        placement: "bottom",
+        duration: 2000,
+      });
+    }
   };
 
   const closeModal = () => {
     setModalVisible(false);
+    resetCart(); // Reset cart here after the modal closes
   };
 
   const handleRemoveRequest = (item: CartItemType) => {
@@ -97,11 +136,12 @@ export default function Cart() {
   };
 
   const confirmRemoveItem = () => {
-    if (selectedItem) {
-      removeItem(selectedItem.id);
-      setRemoveModalVisible(false);
-      setSelectedItem(null);
+    if (!selectedItem) {
+      return;
     }
+    removeItem(selectedItem.id);
+    setRemoveModalVisible(false);
+    setSelectedItem(null);
   };
 
   const cancelRemoveItem = () => {
@@ -141,7 +181,7 @@ export default function Cart() {
         </TouchableOpacity>
       </View>
 
-      {/* Checkout Modal */}
+      {/* Checkout Modal with Lottie Animation */}
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -150,24 +190,21 @@ export default function Cart() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Proceeding to Checkout</Text>
-            <Text style={styles.modalMessage}>
-              Total amount: ₹{getTotalPrice()}
-            </Text>
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                onPress={closeModal}
-                style={[styles.modalButton, styles.cancelButton]}
-              >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={closeModal}
-                style={[styles.modalButton, styles.checkOutConfirmButton]}
-              >
-                <Text style={styles.checkOutConfirmButtonText}>Confirm</Text>
-              </TouchableOpacity>
-            </View>
+            {/* Lottie Animation */}
+            <LottieView
+              source={require("../../assets/animations/x7lDE2Nae2.json")} // Adjust path
+              autoPlay
+              loop={false}
+              style={styles.animation}
+            />
+            <Text style={styles.modalTitle}>Order Placed Successfully!</Text>
+            <Text style={styles.modalMessage}>Thank you for your order.</Text>
+            <TouchableOpacity
+              onPress={closeModal}
+              style={styles.checkOutConfirmButton}
+            >
+              <Text style={styles.checkOutConfirmButtonText}>Close</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -316,31 +353,52 @@ const styles = StyleSheet.create({
   },
 
   // New styles for Modal
+  // Modal Styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)", // Dark semi-transparent overlay
     justifyContent: "center",
     alignItems: "center",
   },
   modalContent: {
-    width: 300,
+    width: "85%", // Adjusted width for better responsiveness
     padding: 20,
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 5, // Add shadow for Android
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 10,
+    color: "#333",
+    marginBottom: 12,
   },
   modalMessage: {
     fontSize: 16,
-    fontFamily: "Inter_600SemiBold",
-    fontStyle: "normal",
-    fontWeight: "500",
+    color: "#555",
     marginBottom: 20,
+    textAlign: "center",
   },
+  checkOutConfirmButton: {
+    backgroundColor: "#000", // Dark button background
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignSelf: "center", // Center the button
+    elevation: 2, // Shadow for Android
+  },
+  checkOutConfirmButtonText: {
+    fontFamily: "Inter_600SemiBold",
+    fontSize: 16,
+    color: "#FFFFFF", // White text for visibility
+    textAlign: "center",
+  },
+
   modalButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -358,18 +416,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 4, // Slightly more rounded corners
-  },
-  checkOutConfirmButton: {
-    backgroundColor: "#0e110e",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  checkOutConfirmButtonText: {
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 16,
-    fontWeight: "black",
-    color: "white",
   },
 
   confirmButtonText: {
@@ -392,4 +438,5 @@ const styles = StyleSheet.create({
     color: "#000", // Black text for Cancel button
     textAlign: "center",
   },
+  animation: { width: 200, height: 200 },
 });

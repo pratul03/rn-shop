@@ -12,6 +12,7 @@ import { Link, Stack } from "expo-router";
 import { format } from "date-fns";
 import { Tables } from "../../../types/database.types";
 import { getMyOrders } from "../../../api/api";
+import { Inter_600SemiBold } from "@expo-google-fonts/inter";
 
 const renderItem: ListRenderItem<Tables<"order">> = ({ item }) => {
   return (
@@ -44,12 +45,13 @@ const Orders = () => {
       <Text
         style={{
           fontSize: 16,
+          fontFamily: "Inter_600SemiBold",
           color: "#555",
           textAlign: "center",
           padding: 10,
         }}
       >
-        On orders YET!🫠
+        No orders YET!🥹
       </Text>
     );
   }

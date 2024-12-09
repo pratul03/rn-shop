@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../providers/auth-provider";
+import { generateOrderSlug } from "../utils/utils";
 
 export const getProductsAndCategories = () => {
   return useQuery({
@@ -89,6 +90,42 @@ export const getMyOrders = () => {
   });
 };
 
+export const createOrder = () => {
+  const {
+    user: { id },
+  } = useAuth();
+
+  const slug = generateOrderSlug();
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    async mutationFn({ totalPrice }: { totalPrice: number }) {
+      const { data, error } = await supabase
+        .from("order")
+        .insert({
+          totalPrice,
+          slug,
+          user: id,
+          status: "Pending",
+        })
+        .select("*")
+        .single();
+
+      if (error)
+        throw new Error(
+          `An error occurred while creating order: ${error.message}`
+        );
+
+      return data;
+    },
+
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ["order"] });
+    },
+  });
+};
+
 export const createOrderItem = () => {
   return useMutation({
     async mutationFn(
@@ -127,6 +164,13 @@ export const createOrderItem = () => {
           })
         )
       );
+      if (error) {
+        throw new Error(
+          `An error occurred while creating order item: ${error.message}`
+        );
+      }
+
+      return data;
     },
   });
 };
