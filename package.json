@@ -40,6 +40,7 @@
     "react-native-screens": "3.31.1",
     "react-native-toast-notifications": "^3.4.0",
     "rn-shop": "file:",
+    "supabase": "^2.0.0",
     "zod": "^3.23.8",
     "zustand": "^5.0.0"
   },
