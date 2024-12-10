@@ -174,3 +174,29 @@ export const createOrderItem = () => {
     },
   });
 };
+
+export const getMyOrder = (slug: string) => {
+  const {
+    user: { id },
+  } = useAuth();
+
+  return useQuery({
+    queryKey: ["order", slug],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("order")
+        .select("*, order_items:order_item(*, products:product(*))")
+        .eq("slug", slug)
+        .eq("user", id)
+        .single();
+
+      if (error || !data) {
+        throw new Error(
+          `An error occurred while fetching data: ${error.message}`
+        );
+      }
+
+      return data;
+    },
+  });
+};

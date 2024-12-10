@@ -20,7 +20,7 @@ const ProductDetails = () => {
   const { data: product, error, isLoading } = getProduct(slug);
   const { items, addItem, incrementItem, decrementItem } = useCartStore();
   const cartItem = items.find((product) => product.id === product?.id);
-  const initialQuantity = cartItem ? cartItem.quantity : 1;
+  const initialQuantity = cartItem ? cartItem.quantity : 0;
   const [quantity, setQuantity] = useState(initialQuantity);
   if (isLoading) return <ActivityIndicator />;
   if (error) return <Text>Error : {error.message}</Text>;
