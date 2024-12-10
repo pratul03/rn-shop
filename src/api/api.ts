@@ -144,8 +144,7 @@ export const createOrderItem = () => {
             quantity,
           }))
         )
-        .select("*, products:product(*)")
-        .single();
+        .select("*");
       const productQuantities = insertData.reduce(
         (acc, { productId, quantity }) => {
           if (!acc[productId]) {

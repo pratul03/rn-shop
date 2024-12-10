@@ -42,7 +42,7 @@ const OrderDetails = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.orderItem}>
-            <Image source={item.heroImage} style={styles.heroImage} />
+            <Image source={{ uri: item.heroImage }} style={styles.heroImage} />
             <View style={styles.itemInfo}>
               <Text style={styles.itemName}>{item.title}</Text>
               <Text style={styles.itemPrice}>Price: {item.price}</Text>
