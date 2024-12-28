@@ -7,14 +7,13 @@
     "fkey",
     "flatlist",
     "Ionicons",
+    "plpgsql",
     "Pressable",
     "supabase",
     "tutinfo",
     "zustand"
   ],
-  "deno.enablePaths": [
-    "supabase/functions"
-  ],
+  "deno.enablePaths": ["supabase/functions"],
   "deno.lint": true,
   "deno.unstable": [
     "bare-node-builtins",
