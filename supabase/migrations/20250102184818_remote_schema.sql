@@ -92,6 +92,12 @@ begin
 end;
 $$;
 
+-- On Auth user insert, create a new user in the public schema
+create 
+or replace trigger on_auth_user_created
+after insert on auth.users for each row
+execute procedure public.handle_new_user ();
+
 
 ALTER FUNCTION "public"."handle_new_user"() OWNER TO "postgres";
 
