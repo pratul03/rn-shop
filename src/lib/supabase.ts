@@ -10,11 +10,16 @@ import { Database } from "../types/database.types";
 // it is used to encrypt/decrypt values stored in AsyncStorage.
 
 //YOUR_REACT_NATIVE_SUPABASE_URL;
-const supabaseUrl = "https://dqtznfenonxvjwoowede.supabase.co";
+const supabaseUrl = " http://127.0.0.1:54321";
 
 //YOUR_REACT_NATIVE_SUPABASE_ANON_KEY
-const supabaseAnonKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxdHpuZmVub254dmp3b293ZWRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA4MDAzMTYsImV4cCI6MjA0NjM3NjMxNn0.76qXmScIwLnM6f0m-ujLG1nVgYqzCvCYcN_3iWo2Pm8";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0";
+
+// const supabaseUrl = "https://dqtznfenonxvjwoowede.supabase.co";
+
+// //YOUR_REACT_NATIVE_SUPABASE_ANON_KEY
+// const supabaseAnonKey =
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxdHpuZmVub254dmp3b293ZWRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA4MDAzMTYsImV4cCI6MjA0NjM3NjMxNn0.76qXmScIwLnM6f0m-ujLG1nVgYqzCvCYcN_3iWo2Pm8";
 
 class LargeSecureStore {
   private async _encrypt(key: string, value: string) {
